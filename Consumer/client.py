@@ -1,7 +1,7 @@
-from constCS import *
+from Include.constants import *
+from random import *
 import sys
 import zmq
-from random import *
 import time
 
 if sys.argv[1] == '1':
