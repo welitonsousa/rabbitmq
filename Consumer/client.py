@@ -1,32 +1,23 @@
-from Include.constants import *
-from random import *
-import sys
 import zmq
+import threading
 import time
+from random import choice
+from utils import *
+from Constants import *
 
-if sys.argv[1] == '1':
-	port = PORT1
-elif sys.argv[1] == '2':
-	port = PORT2
-else:
-	print("Wrong arguments")
-	exit()
+port = get_args(1, Constants.DEFAULT_PORT())
 
 context = zmq.Context()
-s  = context.socket(zmq.REQ)
-p = f"tcp://{HOST}:{port}"
-s.connect(p)
+socket  = context.socket(zmq.REQ)
+connection = f"tcp://{Constants.HOST()}:{port}"
+socket.connect(connection)
 
 while True:
-	a = "{:.2f}".format(random()*10)
-	b = "{:.2f}".format(random()*10)
-	op = choice(["+", "*", "**"])
-	
-	send_msg = str.encode(f"{a} {op} {b}")
-	s.send(send_msg)
-	msg = s.recv()
+	selected_message = choice(Constants.DEFAULT_MESSAGES())
+	print(selected_message)
+	send_msg = str.encode(selected_message)
+	socket.send(send_msg)
+	msg = socket.recv()
 	result = bytes.decode(msg)
-	
-	time.sleep(1)
-	
-	print (a, op, b, '=', result)
+	print (result)
+	time.sleep(2)

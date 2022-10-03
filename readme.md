@@ -1,25 +1,21 @@
-### activate your environments
+<h1 style="color: red">Rabbitmq</h1>
+
+### Producer
+##### build the image
 ```bash
-  python -m venv .
+docker build -t producer --build-arg Q=QUANTITY_PORTS I=INITIAL_PORT .
+```
+##### run the image
+```bash
+docker run producer
 ```
 
-### enter in your venv environments
-<img width="500" src="./assets/screenshots/use_venv.png">
+<hr>
 
-
-### install all dependencies
+### Consumer
+##### build the image
 ```bash
-  pip install -r requirements.txt
-```
-
-### run server
-```bash
-  python ./Include/producer/server.py
-```
-
-### run client
-```bash
-  python ./Include/consumer/client.py
+docker build -t consumer --build-arg Q=QUANTITY_PORTS I=INITIAL_PORT .
 ```
 
 <br>
