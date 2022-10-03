@@ -1,5 +1,7 @@
+import statistics
 import Pyro4
 import threading
+import time
 
 from more_itertools import quantify
 
@@ -70,6 +72,17 @@ class Swapper(object):
   def len_queues(self, rule) -> int:
     return len(self.__queues[rule]["value"])
   
+  def len_max_queues(self, rule, time) -> int:
+    t0 = time.time()
+    max = 0
+    while(time.time() - t0 < time):
+      quantity = len(self.__queues[rule]["value"])
+      if(max < quantity):
+        max = quantity
+    return max
+  
+
+print('Olá!')
 
 daemon = Pyro4.Daemon()
 uri = daemon.register(Swapper)
