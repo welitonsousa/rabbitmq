@@ -1,30 +1,35 @@
-# import time
-# import threading
-
-# filas = {}
-
-# def test(key, message):
-#   if (filas.get("a") is None):
-#     filas[key] = {"value": [], "condition": threading.Condition()}
-#   time.sleep(2)
-#   filas[key]["value"].append(message)
-
-# threads = []
-# thread1 = threading.Thread(target=test, args=("tcc", "teste"))
-# thread2 = threading.Thread(target=test, args=("tcc2", "teste2"))
-
-# thread1.start()
-# thread2.start()
-# thread1.join()
-# thread2.join()
-# print(filas)
-# for i in filas:
-#   print(i)
+import signal
+import atexit
+import time
+import threading
+import sys
 
 
-a = [1]
-if (a):
-  print("entrou") 
 
-if __name__ == "__main__":
-  print("entrou")
+
+
+def main():
+  while True:
+    print("running")
+    time.sleep(1)
+try:  
+  thread = threading.Thread(target=main)
+  thread.start()
+except KeyboardInterrupt:
+  sys.exit(0)
+  
+# import Pyro4
+
+# @Pyro4.expose
+# class GreetingMaker(object):
+#   def get_fortune(self, name):
+#     return "Hello, {0}. Here is your fortune message:\n" \
+#       "Tomorrow's lucky number is 12345678.".format(name)
+
+# daemon = Pyro4.Daemon()                # make a Pyro daemon
+# ns = Pyro4.locateNS()                  # find the name server
+# uri = daemon.register(GreetingMaker)   # register the greeting maker as a Pyro object
+# ns.register("example.greeting", uri)   # register the object with a name in the name server
+
+# print("Ready.")
+# daemon.requestLoop()                   # start the event loop of the server to wait for calls

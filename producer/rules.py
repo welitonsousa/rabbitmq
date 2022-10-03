@@ -1,1 +1,1 @@
-rules = "abcdefghijk"
+rules = "abcdefghijklmnopqrstuvwxyz"

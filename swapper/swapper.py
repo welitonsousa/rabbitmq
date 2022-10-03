@@ -2,7 +2,7 @@ import Pyro4
 import threading
 
 @Pyro4.expose
-class Swapper():
+class Swapper(object):
   __queues = {}
   __consumers = []
 
@@ -23,6 +23,7 @@ class Swapper():
       self.__add_message(rule, message, 0)
 
   def send_message(self, rule: str, message: str) -> None:
+    print(self.__consumers)
     if rule == "fanout":
       self.__fanout(message)
     else:
@@ -44,11 +45,21 @@ class Swapper():
 
   def new_consumer(self, rule: str) -> None:
     self.__consumers.insert(0, rule)
+    print(self.__consumers)
   def remove_consumer(self, rule: str) -> None:
-    self.__consumers.remove(rule)
+    # self.__consumers.remove(rule)
+    print(self.__consumers)
 
 daemon = Pyro4.Daemon()
 uri = daemon.register(Swapper)
-print("running", uri)
+print("running:", uri)
 daemon.requestLoop()
 
+
+# daemon = Pyro4.Daemon()
+# uri = daemon.register(Swapper)
+# ns = Pyro4.locateNS()
+# ns.register('obj', uri)
+
+# print("Ready.")
+# daemon.requestLoop()   

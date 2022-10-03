@@ -6,6 +6,7 @@ from generate_message import *
 from rules import *
 
 uri = input("URI:").strip()
+time_sleep = 60 / int(input("messages/minutes:").strip())
 proxy = Pyro4.Proxy(uri)
 print('connected')
 
@@ -23,9 +24,8 @@ def producer():
       proxy.send_message(rule, message)
       print("{}: {}".format(rule, message))
     
-    time.sleep(random.randint(0, 10))
+    time.sleep(time_sleep)
 
-producer()
-# thread_prod = threading.Thread(target=producer)
-# thread_prod.start()
-# thread_prod.join()
+thread_prod = threading.Thread(target=producer)
+thread_prod.start()
+thread_prod.join()

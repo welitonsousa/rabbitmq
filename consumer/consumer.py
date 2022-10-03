@@ -1,26 +1,32 @@
 import Pyro4
 import threading
 import atexit
+import sys
 
 def exit_handler():
-  print('My application is ending!')
-
-atexit.register(exit_handler)
-uri = input("URI:").strip()
-proxy = Pyro4.Proxy(uri)
-
+  print("exist consumer - {}".format(rule))
+  proxy.remove_consumer(rule)
 
 def consumer(rule: str) -> None:
   while True:
-    print("asd")
     message = proxy.receive_message(rule) 
     print("{}: {}".format(rule, message))
 
 
+
+uri = input("URI:").strip()
 rule = input("Rule:")
-thread = threading.Thread(target=consumer, args=(rule,))
+
+proxy = Pyro4.Proxy(uri)
 proxy.new_consumer(rule)
-thread.start()
-thread.join()
+# atexit.register(exit_handler)
+thread = threading.Thread(target=consumer, args=(rule,))
 
-
+try:
+  thread.start()
+  thread.join()
+except KeyboardInterrupt:
+  print('Interrupted')
+  proxy.remove_consumer(rule)
+  print("teset")
+  
