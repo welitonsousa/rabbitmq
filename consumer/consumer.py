@@ -1,6 +1,5 @@
 import Pyro4
 import threading
-import atexit
 import sys
 
 def exit_handler():
@@ -19,14 +18,12 @@ rule = input("Rule:")
 
 proxy = Pyro4.Proxy(uri)
 proxy.new_consumer(rule)
-# atexit.register(exit_handler)
 thread = threading.Thread(target=consumer, args=(rule,))
 
 try:
   thread.start()
   thread.join()
 except KeyboardInterrupt:
-  print('Interrupted')
-  proxy.remove_consumer(rule)
-  print("teset")
+  print("O consumidor foi encerrado")
+  sys.exit()
   

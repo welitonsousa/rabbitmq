@@ -36,7 +36,8 @@ class Swapper(object):
     message = None
     while True:
       if self.__queues[rule]["value"]:
-        message = self.__queues[rule]["value"].pop(0)
+        if (self.__consumers.index(rule) != -1):
+          message = self.__queues[rule]["value"].pop(0)
         print("{} recebeu: {}".format(rule, message))  
         break
       self.__queues[rule]["condition"].wait()
@@ -45,9 +46,6 @@ class Swapper(object):
 
   def new_consumer(self, rule: str) -> None:
     self.__consumers.insert(0, rule)
-    print(self.__consumers)
-  def remove_consumer(self, rule: str) -> None:
-    # self.__consumers.remove(rule)
     print(self.__consumers)
 
 daemon = Pyro4.Daemon()

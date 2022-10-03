@@ -4,6 +4,7 @@ import time
 import threading
 from generate_message import *
 from rules import *
+import sys
 
 uri = input("URI:").strip()
 time_sleep = 60 / int(input("messages/minutes:").strip())
@@ -29,3 +30,11 @@ def producer():
 thread_prod = threading.Thread(target=producer)
 thread_prod.start()
 thread_prod.join()
+
+try:
+  thread_prod.start()
+  thread_prod.join()
+except KeyboardInterrupt:
+  print("O produtor foi encerrado")
+  sys.exit()
+  
