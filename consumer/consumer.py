@@ -1,32 +1,36 @@
 import Pyro4
 import threading
-import atexit
 import sys
-
-def exit_handler():
-  print("exist consumer - {}".format(rule))
-  proxy.remove_consumer(rule)
 
 def consumer(rule: str) -> None:
   while True:
     message = proxy.receive_message(rule) 
     print("{}: {}".format(rule, message))
 
+def connect_proxy():
+  ns = Pyro4.locateNS()
+  uri = ns.lookup('obj')
+  return Pyro4.Proxy(uri)
 
-
-uri = input("URI:").strip()
-rule = input("Rule:")
-
-proxy = Pyro4.Proxy(uri)
+rule = None
+try:
+  rule = sys.argv[1].split("=")[1]
+  if rule == None or rule == '': 
+    raise 
+except:
+  print("rule=<character_alphabet>\n \033[91m parameter is required \033[0m")
+  sys.exit()
+proxy = connect_proxy()
+print("connected")
 proxy.new_consumer(rule)
-# atexit.register(exit_handler)
 thread = threading.Thread(target=consumer, args=(rule,))
 
 try:
   thread.start()
   thread.join()
 except KeyboardInterrupt:
-  print('Interrupted')
+  proxy = connect_proxy()
   proxy.remove_consumer(rule)
-  print("teset")
+  print("O consumidor foi encerrado")
+  sys.exit()
   
