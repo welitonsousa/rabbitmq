@@ -9,6 +9,7 @@ import sys
 uri = input("URI:").strip()
 time_sleep = 60 / int(input("messages/minutes:").strip())
 proxy = Pyro4.Proxy(uri)
+proxy.new_producer()
 print('connected')
 
 
@@ -28,8 +29,6 @@ def producer():
     time.sleep(time_sleep)
 
 thread_prod = threading.Thread(target=producer)
-thread_prod.start()
-thread_prod.join()
 
 try:
   thread_prod.start()
