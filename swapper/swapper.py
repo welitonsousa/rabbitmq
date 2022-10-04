@@ -3,6 +3,7 @@ import threading
 import time
 
 @Pyro4.expose
+@Pyro4.behavior(instance_mode="single")
 class Swapper(object):
   __queues = {}
   __consumers = []
@@ -28,7 +29,6 @@ class Swapper(object):
       self.__add_message(rule, message, 0)
 
   def send_message(self, rule: str, message: str) -> None:
-    print(self.__consumers)
     if rule == "fanout":
       self.__fanout(message)
     else:
@@ -52,14 +52,19 @@ class Swapper(object):
 
   def new_consumer(self, rule: str) -> None:
     self.__consumers.insert(0, rule)
-    print(self.__consumers)
+    
+  def remove_consumer(self, rule: str) -> None:
+    self.__consumers.remove(rule)
+    print("consumer removed: {}".format(rule))
 
   def new_producer(self) -> None:
     self.__producers += 1
-    print(self.__producers)
+
+  def remove_producer(self) -> None:
+    self.__producers -= 1
+    print("producer removed")
 
   def quantity_producers(self) -> int:
-    print(self.__producers)
     return self.__producers
 
   def quantity_consumers(self) -> int:
@@ -92,14 +97,8 @@ class Swapper(object):
 
 daemon = Pyro4.Daemon()
 uri = daemon.register(Swapper)
-print("running:", uri)
-daemon.requestLoop()
+ns = Pyro4.locateNS()
+ns.register('obj', uri)
 
-
-# daemon = Pyro4.Daemon()
-# uri = daemon.register(Swapper)
-# ns = Pyro4.locateNS()
-# ns.register('obj', uri)
-
-# print("Ready.")
-# daemon.requestLoop()   
+print("URI: {}".format(uri))
+daemon.requestLoop() 

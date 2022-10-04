@@ -1,4 +1,5 @@
 <h1 style="color: red">Rabbitmq</h1>
+<!-- python3 -m Pyro4.naming -->
 
 ### Producer
 ##### build the image

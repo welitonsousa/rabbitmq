@@ -2,11 +2,10 @@ import Pyro4
 import sys
 import time
 
-
 arg = sys.argv
 
-
-uri = input("URI:").strip()
+ns = Pyro4.locateNS()
+uri = ns.lookup('obj')
 proxy = Pyro4.Proxy(uri)
 
 def statistic(rule: str) -> None:
