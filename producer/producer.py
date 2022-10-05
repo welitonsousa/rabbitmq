@@ -11,16 +11,22 @@ def connect_proxy():
   uri = ns.lookup('obj')
   return Pyro4.Proxy(uri)
 
+
 def producer():
   while(True):
     index = random.randint(0, len(rules))
     message = generate_message()
-    if index == len(rules):
-      rule = "fanout"
+    if(len(sys.argv)> 2):
+      rule = sys.argv[2]
+    else:
+      if index == len(rules):
+        rule = "fanout"
+      else:
+        rule = random.choice(rules)
+    if(rule == 'fannout'):
       proxy.send_message(rule, message)
       print("all: {}".format(message))
     else:
-      rule = random.choice(rules)
       proxy.send_message(rule, message)
       print("{}: {}".format(rule, message))
     time.sleep(time_sleep)
@@ -32,7 +38,7 @@ try:
   if time_sleep == None or time_sleep == '': 
     raise 
 except:
-  print("mps=<integer_number>\n \033[91m parameter is required \033[0m")
+  print("mpm=<integer_number>\n \033[91m parameter is required \033[0m")
   sys.exit()
 
 proxy = connect_proxy()
