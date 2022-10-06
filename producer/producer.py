@@ -42,9 +42,10 @@ except:
 
 arg_rule = None
 try:
-  arg_rule = sys.argv[2].split("=")[1]
-  if len(sys.argv) > 2 and arg_rule == None or arg_rule == '': 
-    raise
+  if len(sys.argv)>2:
+    arg_rule = sys.argv[2].split("=")[1]
+    if (arg_rule == None or arg_rule == ''): 
+      raise
 except:
   print("rule=<character_alphabet>\n \033[91m invalid parameter \033[0m")
   sys.exit()
