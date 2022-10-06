@@ -16,9 +16,8 @@ def producer():
   while(True):
     index = random.randint(0, len(rules))
     message = generate_message()
-    if(len(sys.argv)> 2):
-      rule = sys.argv[2]
-    else:
+    rule = arg_rule
+    if(arg_rule == None):
       if index == len(rules):
         rule = "fanout"
       else:
@@ -39,6 +38,16 @@ try:
     raise 
 except:
   print("mpm=<integer_number>\n \033[91m parameter is required \033[0m")
+  sys.exit()
+
+arg_rule = None
+try:
+  if len(sys.argv)>2:
+    arg_rule = sys.argv[2].split("=")[1]
+    if (arg_rule == None or arg_rule == ''): 
+      raise
+except:
+  print("rule=<character_alphabet>\n \033[91m invalid parameter \033[0m")
   sys.exit()
 
 proxy = connect_proxy()
